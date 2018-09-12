@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 
 public class ShowPanels : MonoBehaviour {
 
@@ -7,13 +8,24 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject OptionsTint;							//Store a reference to the Game Object OptionsTint 
 	public GameObject MenuPanel;							//Store a reference to the Game Object MenuPanel 
 	public GameObject PausePanel;							//Store a reference to the Game Object PausePanel 
+	public GameObject GameplayPanel;
 
+	public void ShowGameplayPanel()
+	{
+		GameplayPanel.SetActive(true);
+	}
+
+	public void HideGameplayPanel()
+	{
+		GameplayPanel.SetActive(false);
+	}
+	
 	public void ShowOptionsPanel()
 	{
 		OptionsPanel.SetActive(true);
 		OptionsTint.SetActive(true);
 	}
-
+	
 	public void HideOptionsPanel()
 	{
 		OptionsPanel.SetActive(false);
