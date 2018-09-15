@@ -14,7 +14,6 @@ public class StartOptions : MonoBehaviour {
 	private PlayMusic _playMusic;
 	private float fastFadeIn = .01f;
 	private ShowPanels _showPanels;
-	private GameObject _player;
 	private GameObject _startOptionSelector; 
 
 	public void Awake()
@@ -27,21 +26,12 @@ public class StartOptions : MonoBehaviour {
 		_showPanels = GetComponent<ShowPanels>();
 		PauseScript = GetComponent<Pause>();
 		_playMusic = GetComponent<PlayMusic>();
-		_player = GameObject.FindGameObjectWithTag("Player");
 
-		SetPlayerState(false);
 		SetUnscaleUiAnimatorUpdateMode();
 		PauseScript.DoPause();
 	}
 
-	public void SetPlayerState(bool isEnabled)
-	{
-//		if (_player != null)
-//		{
-//			_player.gameObject.GetComponent<Player>().enabled = isEnabled;
-//			_player.gameObject.GetComponent<Controller2D>().enabled = isEnabled;
-//		}
-	}
+
 
 	private void SetUnscaleUiAnimatorUpdateMode()
 	{
@@ -53,7 +43,6 @@ public class StartOptions : MonoBehaviour {
 	public void StartButtonClicked()
 	{
 		FadeOutMusicOnStartIfAppropriate();
-		SetPlayerState(true);
 		StartGameInScene();
 	}
 
@@ -78,6 +67,7 @@ public class StartOptions : MonoBehaviour {
 		ChangeMusicOnStartIfAppropriate();
 		FadeAndDisableMenuPanel();
 		StartCoroutine("UnpauseGameAfterMenuFaded");
+		_showPanels.ShowGameplayPanel();
 
 	}
 
