@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using  SimpleFileBrowser;
-using UnityEditor;
+using SimpleFileBrowser;
 using UnityEngine.UI;
 
 [System.Serializable]
 public class FileLoader : MonoBehaviour
 {
     [SerializeField]
-    private Image _appliedImage;
-    private Texture _loadedTexture; 
+    private GameObject _uiCanvasGameObject;
+    [SerializeField]
+    private List<Image> _appliedImage;
+    [SerializeField]
+    private List<Texture> _loadedTexture; 
     
     public void ConfigClick()
     {
@@ -36,17 +37,36 @@ public class FileLoader : MonoBehaviour
         {
             yield return null;
         }
-        _loadedTexture = fileDir.texture;
+        Debug.LogError(_loadedTexture);
+        _loadedTexture.Add(fileDir.texture);
         Debug.LogError(_loadedTexture);
         ApplyLoadedPicToImageTexture();
+        SaveFileToDataPath();
+    }
+
+    public void AddEntryClick()
+    {
+        Debug.LogError("AddEntry");
+        var newEntry = Instantiate((GameObject)Resources.Load("Prefabs/ImageEntry"));
+        newEntry.transform.parent = _uiCanvasGameObject.transform;
+        _appliedImage.Add(newEntry.GetComponent<Image>());
+    }
+   
+    private void SaveFileToDataPath()
+    {
+       // System.IO.File.WriteAllBytes();_appliedImage.material.mainTexture}
     }
 
     private void ApplyLoadedPicToImageTexture()
     {
-        Debug.LogError("1 applied "+ _appliedImage.material);
-        _appliedImage.material = new Material(Shader.Find("Sprites/Default"));
-        Debug.LogError("2 applied "+ _appliedImage);
-        _appliedImage.material.mainTexture = _loadedTexture;
+        for (var i = 0; i < _appliedImage.Count; i ++)
+        {
+            if (_loadedTexture[i] != null)
+            {
+                _appliedImage[i].material = new Material(Shader.Find("Sprites/Default"));
+                _appliedImage[i].material.mainTexture = _loadedTexture[i];
+            }
+        }
     }
     
 }
