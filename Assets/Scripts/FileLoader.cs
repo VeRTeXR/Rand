@@ -44,6 +44,11 @@ public class FileLoader : MonoBehaviour
         SaveFileToDataPath();
     }
 
+    public void DeleteEntry()
+    {
+        
+    }
+    
     public void AddEntryClick()
     {
         Debug.LogError("AddEntry");

@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour {
 	public static Manager instance = null; 
 	public GameObject StartMenu;
 	public Pause PauseScript;
+	public FileLoader FileLoader;
 
 
 	void Start () {
@@ -21,11 +22,7 @@ public class Manager : MonoBehaviour {
 		}
 
 		DontDestroyOnLoad (gameObject);
-		StartMenu = GameObject.FindGameObjectWithTag("StartMenu");
-		if (StartMenu != null)
-		{
-			PauseScript = StartMenu.GetComponent<Pause>();
-		}
+		FileLoader = GetComponent<FileLoader>();
 	}
 
 	void OnLevelWasLoaded(int index)  {
