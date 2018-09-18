@@ -12,11 +12,11 @@ public class FileLoader : MonoBehaviour
     [SerializeField]
     private List<Image> _appliedImage;
     [SerializeField]
-    private List<Texture> _loadedTexture; 
+    private List<Sprite> _loadedSprites; 
     
-    public void ConfigClick()
+    public void LoadImage()
     {
-        FileBrowser.SetFilters( true, new FileBrowser.Filter( "Images", ".jpg", ".png" ), new FileBrowser.Filter( "Text Files", ".txt", ".pdf" ) );
+        FileBrowser.SetFilters( false, new FileBrowser.Filter( "Images", ".jpg", ".png" ), new FileBrowser.Filter( "Text Files", ".txt", ".pdf" ) );
 
         StartCoroutine("ShowLoadDialogCoroutine");
     } 
@@ -37,16 +37,35 @@ public class FileLoader : MonoBehaviour
         {
             yield return null;
         }
-        Debug.LogError(_loadedTexture);
-        _loadedTexture.Add(fileDir.texture);
-        Debug.LogError(_loadedTexture);
+        Texture2D loadedTex = new Texture2D( fileDir.texture.width, fileDir.texture.height, TextureFormat.ARGB32, false);
+       
+        fileDir.LoadImageIntoTexture(loadedTex);
+        Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
+        var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
+        _loadedSprites.Add(spriteToUse); 
         ApplyLoadedPicToImageTexture();
-        SaveFileToDataPath();
     }
 
-    public void DeleteEntry()
+    public void DeleteEntry(GameObject entryGameObject)
     {
-        
+        var entryImgComponent = entryGameObject.GetComponentInChildren<Image>();
+        if (entryImgComponent.sprite != null && _loadedSprites.Contains(entryImgComponent.sprite))
+        {
+            for (var i = 0; i < _loadedSprites.Count; i++)
+            {
+                if (entryImgComponent.sprite == _loadedSprites[i])
+                    _loadedSprites.Remove(_loadedSprites[i]);
+            }
+        }
+        if (_appliedImage.Contains(entryImgComponent))
+        {
+            for (var i = 0; i < _appliedImage.Count; i++)
+            {
+                if (entryImgComponent == _appliedImage[i])
+                    _appliedImage.Remove(_appliedImage[i]);
+            }
+        }
+        Destroy(entryGameObject);
     }
     
     public void AddEntryClick()
@@ -54,23 +73,18 @@ public class FileLoader : MonoBehaviour
         Debug.LogError("AddEntry");
         var newEntry = Instantiate((GameObject)Resources.Load("Prefabs/ImageEntry"));
         newEntry.transform.parent = _uiCanvasGameObject.transform;
-        _appliedImage.Add(newEntry.GetComponent<Image>());
+        var imgComponent = newEntry.GetComponentInChildren<Image>();
+        _appliedImage.Add(imgComponent);
     }
    
-    private void SaveFileToDataPath()
-    {
-       // System.IO.File.WriteAllBytes();_appliedImage.material.mainTexture}
-    }
 
     private void ApplyLoadedPicToImageTexture()
     {
         for (var i = 0; i < _appliedImage.Count; i ++)
         {
-            if (_loadedTexture[i] != null)
-            {
-                _appliedImage[i].material = new Material(Shader.Find("Sprites/Default"));
-                _appliedImage[i].material.mainTexture = _loadedTexture[i];
-            }
+            if (_loadedSprites[i] != null)
+                _appliedImage[i].sprite = _loadedSprites[i];
+           
         }
     }
     

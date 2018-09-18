@@ -1,41 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ImageEntry : MonoBehaviour
 {
 
-	private int MaxCount;
-	private int CurrentCount;
-	public GameObject IncreaseButton;
-	public GameObject DecreaseButton;
+	private int _maxCount;
+	private int _currentCount;
+	private string _description;
+	public Button IncreaseButton;
+	public Button DecreaseButton;
+	public Button LoadButton;
+	public Button DeleteButton;
+	
 
 	void Start()
 	{
-		
+		if (IncreaseButton != null)
+			IncreaseButton.onClick.AddListener(IncreaseCurrentEntryCount);
+		if(DecreaseButton != null) 
+			DecreaseButton.onClick.AddListener(DecreaseCurrentEntryCount);
+		if(LoadButton != null) 
+			LoadButton.onClick.AddListener(LoadImage);
+		if(DeleteButton != null) 
+			DeleteButton.onClick.AddListener(DeleteEntry);
+	}
+	
+	void Update()
+	{
+		if (_maxCount < _currentCount)
+			_maxCount = _currentCount;
 	}
 
+	public void SetDescription(string text)
+	{
+		_description = text;
+	}
+
+	public string GetDescription()
+	{
+		return _description;
+	}
+
+	public void LoadImage()
+	{
+		Manager.instance.FileLoader.LoadImage();
+	}
 
 	public void DeleteEntry()
 	{
-		Destroy(gameObject);
-		//Manager.instance.FileLoader
+		Manager.instance.FileLoader.DeleteEntry(gameObject);
 	}
 	
-	
-	public void IncreaseCurrentCount()
+	public void IncreaseCurrentEntryCount()
 	{
-		CurrentCount++;
+		_currentCount++;
 	}
 
-	public void DecreaseCurrentCount()
+	public void DecreaseCurrentEntryCount()
 	{
-		CurrentCount--;
+		_currentCount--;
 	}
 
-	public int GetCurrentCount()
+	public int GetCurrentEntryCount()
 	{
-		return CurrentCount;
+		return _currentCount;
+	}
+
+	public int GetMaxEntryCount()
+	{
+		return _maxCount;
 	}
 
 }
