@@ -14,14 +14,14 @@ public class FileLoader : MonoBehaviour
     [SerializeField]
     private List<Sprite> _loadedSprites; 
     
-    public void LoadImage()
+    public void LoadImage(int appliedImageIndex)
     {
         FileBrowser.SetFilters( false, new FileBrowser.Filter( "Images", ".jpg", ".png" ), new FileBrowser.Filter( "Text Files", ".txt", ".pdf" ) );
 
-        StartCoroutine("ShowLoadDialogCoroutine");
+        StartCoroutine(ShowLoadDialogCoroutine(appliedImageIndex));
     } 
 	
-    IEnumerator ShowLoadDialogCoroutine()
+    IEnumerator ShowLoadDialogCoroutine(int appliedImageIndex)
     {
         // Show a load file dialog and wait for a response from user
         // Load file/folder: file, Initial path: default (Documents), Title: "Load File", submit button text: "Load"
@@ -42,8 +42,10 @@ public class FileLoader : MonoBehaviour
         fileDir.LoadImageIntoTexture(loadedTex);
         Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
         var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
-        _loadedSprites.Add(spriteToUse); 
-        ApplyLoadedPicToImageTexture();
+        //_loadedSprites.Add(spriteToUse); 
+        _loadedSprites.RemoveAt(appliedImageIndex);
+        _loadedSprites.Insert(appliedImageIndex, spriteToUse);
+        ApplyLoadedPicToImageTexture(appliedImageIndex);
     }
 
     public void DeleteEntry(GameObject entryGameObject)
@@ -74,18 +76,19 @@ public class FileLoader : MonoBehaviour
         var newEntry = Instantiate((GameObject)Resources.Load("Prefabs/ImageEntry"));
         newEntry.transform.parent = _uiCanvasGameObject.transform;
         var imgComponent = newEntry.GetComponentInChildren<Image>();
+        newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
         _appliedImage.Add(imgComponent);
+        _loadedSprites.Add(null);
     }
    
 
-    private void ApplyLoadedPicToImageTexture()
+    private void ApplyLoadedPicToImageTexture(int appliedImageIndex)
     {
-        for (var i = 0; i < _appliedImage.Count; i ++)
-        {
-            if (_loadedSprites[i] != null)
-                _appliedImage[i].sprite = _loadedSprites[i];
+        
+            if (_loadedSprites[appliedImageIndex] != null)
+                _appliedImage[appliedImageIndex].sprite = _loadedSprites[appliedImageIndex];
            
-        }
+        
     }
     
 }

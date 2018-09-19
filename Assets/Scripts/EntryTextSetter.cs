@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.VR.WSA.Input;
 
 public class EntryTextSetter : MonoBehaviour
 {

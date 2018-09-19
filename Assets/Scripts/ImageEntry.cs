@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class ImageEntry : MonoBehaviour
 {
 
+	private int _entryIndex; 
 	private int _maxCount;
 	private int _currentCount;
 	private string _description;
@@ -31,6 +32,11 @@ public class ImageEntry : MonoBehaviour
 			_maxCount = _currentCount;
 	}
 
+	public void SetEntryIndex(int i)
+	{
+		_entryIndex = i;
+	}
+	
 	public void SetDescription(string text)
 	{
 		_description = text;
@@ -43,7 +49,7 @@ public class ImageEntry : MonoBehaviour
 
 	public void LoadImage()
 	{
-		Manager.instance.FileLoader.LoadImage();
+		Manager.instance.FileLoader.LoadImage(_entryIndex);
 	}
 
 	public void DeleteEntry()
