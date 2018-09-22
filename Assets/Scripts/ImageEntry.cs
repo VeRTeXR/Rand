@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ImageEntry : MonoBehaviour
 {
-
 	private int _entryIndex; 
 	private int _maxCount;
 	private int _currentCount;
@@ -65,11 +65,13 @@ public class ImageEntry : MonoBehaviour
 	public void IncreaseCurrentEntryCount()
 	{
 		_currentCount++;
+		Mathf.Clamp(_currentCount, 0, Int32.MaxValue);
 	}
 
 	public void DecreaseCurrentEntryCount()
 	{
 		_currentCount--;
+		Mathf.Clamp(_currentCount, 0, Int32.MaxValue);
 	}
 
 	public int GetCurrentEntryCount()

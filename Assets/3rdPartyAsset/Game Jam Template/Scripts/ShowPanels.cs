@@ -7,7 +7,18 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject MenuPanel;							
 	public GameObject PausePanel;							 
 	public GameObject GameplayPanel;
+	public GameObject ConfigPanel;
 
+	public void ShowConfigPanel()
+	{
+		ConfigPanel.SetActive(true); 
+	}
+
+	public void HideConfigPanel()
+	{
+		ConfigPanel.SetActive(false);
+	}
+	
 	public void ShowGameplayPanel()
 	{
 		GameplayPanel.SetActive(true);

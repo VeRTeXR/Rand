@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using SimpleFileBrowser;
 using UnityEngine.UI;
 
-[System.Serializable]
 public class EntryManager : MonoBehaviour
 {
     [SerializeField] private GameObject _uiCanvasGameObject;
     [SerializeField] private List<Image> _appliedImage;
     [SerializeField] private List<Sprite> _loadedSprites;
+    public List<ImageEntry> ImageEntry;
 
     public void LoadImage(int appliedImageIndex)
     {
@@ -74,6 +71,7 @@ public class EntryManager : MonoBehaviour
         newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
         _appliedImage.Add(imgComponent);
         _loadedSprites.Add(null);
+        ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
     }
 
 
@@ -82,24 +80,45 @@ public class EntryManager : MonoBehaviour
         if (_loadedSprites[appliedImageIndex] != null)
             _appliedImage[appliedImageIndex].sprite = _loadedSprites[appliedImageIndex];
     }
+//
+//    public void SaveData()
+//    {
+//        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
+//        BinaryFormatter binF = new BinaryFormatter();
+//        
+//        Debug.LogError(Application.persistentDataPath);
+//        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.OpenOrCreate);
+//        ManagerData dat = new ManagerData();
+//        dat.entryImages = _appliedImage;
+//        dat.LoadedSprites = _loadedSprites;
+//        binF.Serialize(file, dat);
+//        file.Close();
+//    }
+//
+//    public void LoadData()
+//    {
+//        BinaryFormatter binF = new BinaryFormatter();
+//        
+//        Debug.LogError(Application.persistentDataPath);
+//        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.Open);
+//
+//        ManagerData loadedData = (ManagerData)binF.Deserialize(file);
+//        file.Close();        
+//        
+//    }
 
-    public void SaveData()
-    {
-        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
-        BinaryFormatter binF = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.Open);
-        ManagerData dat = new ManagerData();
-        dat.entryImages = _appliedImage;
-        dat.LoadedSprites = _loadedSprites;
-        binF.Serialize(file, dat);
-        file.Close();
-    }
+//    public void SaveDataClick()
+//    {
+//        Debug.LogError("save list");
+//        SaveData();
+//    }
+    
 
 }
 
-[Serializable]
-class ManagerData
-{
-    public List<Image> entryImages;
-    public List<Sprite> LoadedSprites;
-}
+//[Serializable]
+//class ManagerData
+//{
+//    public List<Image> entryImages;
+//    public List<Sprite> LoadedSprites;
+//}

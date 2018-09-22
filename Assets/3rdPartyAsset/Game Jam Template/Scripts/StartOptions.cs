@@ -46,6 +46,12 @@ public class StartOptions : MonoBehaviour {
 		StartGameInScene();
 	}
 
+	public void ConfigButtonClicked()
+	{
+		FadeOutMusicOnStartIfAppropriate();
+		StartGameInConfig();
+	}
+
 	private void FadeOutMusicOnStartIfAppropriate()
 	{
 		if (ChangeMusicOnStart)
@@ -69,6 +75,15 @@ public class StartOptions : MonoBehaviour {
 		StartCoroutine("UnpauseGameAfterMenuFaded");
 		_showPanels.ShowGameplayPanel();
 
+	}
+	
+	public void StartGameInConfig()
+	{
+		InMainMenu = false;
+		ChangeMusicOnStartIfAppropriate();
+		FadeAndDisableMenuPanel();
+		StartCoroutine("UnpauseGameAfterMenuFaded");
+		_showPanels.ShowConfigPanel();
 	}
 
 	private void FadeAndDisableMenuPanel()
