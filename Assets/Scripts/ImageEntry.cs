@@ -36,6 +36,11 @@ public class ImageEntry : MonoBehaviour
 	{
 		_entryIndex = i;
 	}
+
+	public int GetEntryIndex()
+	{
+		return _entryIndex;
+	}
 	
 	public void SetDescription(string text)
 	{
@@ -49,12 +54,12 @@ public class ImageEntry : MonoBehaviour
 
 	public void LoadImage()
 	{
-		Manager.instance.FileLoader.LoadImage(_entryIndex);
+		Manager.instance.EntryManager.LoadImage(_entryIndex);
 	}
 
 	public void DeleteEntry()
 	{
-		Manager.instance.FileLoader.DeleteEntry(gameObject);
+		Manager.instance.EntryManager.DeleteEntry(gameObject);
 	}
 	
 	public void IncreaseCurrentEntryCount()

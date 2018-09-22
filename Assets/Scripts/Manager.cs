@@ -6,7 +6,7 @@ public class Manager : MonoBehaviour {
 	public static Manager instance = null; 
 	public GameObject StartMenu;
 	public Pause PauseScript;
-	public FileLoader FileLoader;
+	public EntryManager EntryManager;
 
 
 	void Start () {
@@ -19,11 +19,7 @@ public class Manager : MonoBehaviour {
 		}
 
 		DontDestroyOnLoad (gameObject);
-		FileLoader = GetComponent<FileLoader>();
-	}
-
-	void OnLevelWasLoaded(int index)  {
-		FindObjectOfType<Score> ().Save (); // save everything on level load
+		EntryManager = GetComponent<EntryManager>();
 	}
 
 	void Update () {
