@@ -6,8 +6,14 @@ public class WheelEntry : MonoBehaviour
 
 	public Image EntryImage;
 
+	void Start()
+	{
+		
+	}
+
 	public void SetEntryImage(Sprite img)
 	{
-		EntryImage.sprite = img;
+		var Image = GetComponent<Image>();
+		Image.sprite = img;
 	}
 }

@@ -19,6 +19,11 @@ public class EntryManager : MonoBehaviour
         StartCoroutine(ShowLoadDialogCoroutine(appliedImageIndex));
     }
 
+    public List<Image> GetAppliedImageList()
+    {
+        return _appliedImage;
+    }
+
     IEnumerator ShowLoadDialogCoroutine(int appliedImageIndex)
     {
         yield return FileBrowser.WaitForLoadDialog(false, null, "Load File", "Load");

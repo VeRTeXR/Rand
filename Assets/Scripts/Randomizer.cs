@@ -34,7 +34,6 @@ public class Randomizer : MonoBehaviour
 	{
 		var entryInstance = Instantiate(WheelEntryTemplate);
 		entryInstance.GetComponent<WheelEntry>();
-		throw new System.NotImplementedException();
 	}
 
 	// Update is called once per frame

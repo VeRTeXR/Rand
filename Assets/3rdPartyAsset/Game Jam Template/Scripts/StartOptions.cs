@@ -70,6 +70,9 @@ public class StartOptions : MonoBehaviour {
 	public void StartGameInScene()
 	{
 		InMainMenu = false;
+		if(_showPanels.ConfigPanel.activeInHierarchy)
+			_showPanels.HideConfigPanel();
+		
 		ChangeMusicOnStartIfAppropriate();
 		FadeAndDisableMenuPanel();
 		StartCoroutine("UnpauseGameAfterMenuFaded");
@@ -84,6 +87,12 @@ public class StartOptions : MonoBehaviour {
 		FadeAndDisableMenuPanel();
 		StartCoroutine("UnpauseGameAfterMenuFaded");
 		_showPanels.ShowConfigPanel();
+	}
+
+	public void StartGameFromConfig()
+	{
+		_showPanels.HideConfigPanel();
+		_showPanels.ShowGameplayPanel();
 	}
 
 	private void FadeAndDisableMenuPanel()
