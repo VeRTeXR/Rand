@@ -6,38 +6,32 @@ public class Randomizer : MonoBehaviour
 	private List<ImageEntry> _currentEntries;
 	private List<GameObject> _spiningWheelEntry;
 	private int _currentIndex;
-	public GameObject WheelEntryTemplate;
 
-	public Randomizer(List<ImageEntry> currentEntries)
+
+	void Awake ()
 	{
-		_currentEntries = currentEntries;
-	}
-
-	void Start () {
-		if (_currentEntries == null)
-		{
+		_currentEntries = null;
 			PopulateEntryList();
-		}
 	}
 
 	private void PopulateEntryList()
 	{
-		for (var i = 0; i < Manager.instance.EntryManager.ImageEntry.Count / 3; i++)
+		if (_currentEntries == null)
 		{
-			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[i]);
-			GenerateSpiningWheelEntry();
+			var loopToIndex = Manager.instance.EntryManager.ImageEntry.Count / 3;
+			_currentEntries = new List<ImageEntry>(loopToIndex);
+			for (var i = 0; i < loopToIndex; i++)
+			{
+				if(Manager.instance.EntryManager.ImageEntry[i] != null)
+					_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[i]);
+			}
+//		_currentIndex = _currentIndex + _currentIndex;
+//		Debug.LogError(_currentIndex);
 		}
-		
 	}
 
-	private void GenerateSpiningWheelEntry()
+	public List<ImageEntry> GetCurrentEntries()
 	{
-		var entryInstance = Instantiate(WheelEntryTemplate);
-		entryInstance.GetComponent<WheelEntry>();
-	}
-
-	// Update is called once per frame
-	void Update () {
-		
+		return _currentEntries;
 	}
 }

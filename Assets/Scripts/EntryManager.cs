@@ -13,8 +13,7 @@ public class EntryManager : MonoBehaviour
 
     public void LoadImage(int appliedImageIndex)
     {
-        FileBrowser.SetFilters(false, new FileBrowser.Filter("Images", ".jpg", ".png"),
-            new FileBrowser.Filter("Text Files", ".txt", ".pdf"));
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Images", ".jpg", ".png"));
 
         StartCoroutine(ShowLoadDialogCoroutine(appliedImageIndex));
     }
@@ -69,7 +68,6 @@ public class EntryManager : MonoBehaviour
 
     public void AddEntryClick()
     {
-        Debug.LogError("AddEntry");
         var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
         newEntry.transform.parent = _uiCanvasGameObject.transform;
         var imgComponent = newEntry.GetComponentInChildren<Image>();
@@ -85,7 +83,7 @@ public class EntryManager : MonoBehaviour
         if (_loadedSprites[appliedImageIndex] != null)
             _appliedImage[appliedImageIndex].sprite = _loadedSprites[appliedImageIndex];
     }
-//
+    
 //    public void SaveData()
 //    {
 //        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
@@ -99,8 +97,8 @@ public class EntryManager : MonoBehaviour
 //        binF.Serialize(file, dat);
 //        file.Close();
 //    }
-//
-//    public void LoadData()
+
+    //    public void LoadData()
 //    {
 //        BinaryFormatter binF = new BinaryFormatter();
 //        

@@ -5812,17 +5812,6 @@ MonoBehaviour:
   _appliedImage: []
   _loadedSprites: []
   ImageEntry: []
---- !u!114 &1125023834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1125023830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0fcd693458384b21b8b82ba3b657faf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1129414027
 GameObject:
   m_ObjectHideFlags: 0
@@ -9890,6 +9879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1944135150}
   - component: {fileID: 1944135151}
+  - component: {fileID: 1944135152}
   m_Layer: 5
   m_Name: SpinningWheel
   m_TagString: Untagged
@@ -9930,6 +9920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WheelEntryPrefab: {fileID: 1292150571494920, guid: 37c202912b8de3541874916d1319b9a2,
     type: 2}
+  RandomizedImageEntries: []
   CurrentWheelEntries: []
   SpawnTransforms:
   - {fileID: 1919841696}
@@ -9943,6 +9934,18 @@ MonoBehaviour:
   - {fileID: 429100666}
   - {fileID: 1673614400}
   imageList: []
+  Randomizer: {fileID: 0}
+--- !u!114 &1944135152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1944135149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ce5c5f81aa8424c8960eec16e2ea5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1998345772
 GameObject:
   m_ObjectHideFlags: 0
