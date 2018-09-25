@@ -18,14 +18,13 @@ public class Randomizer : MonoBehaviour
 	{
 		if (_currentEntries == null)
 		{
-			var loopToIndex = Manager.instance.EntryManager.ImageEntry.Count;
 			_currentEntries = new List<ImageEntry>(10);
 			for (var i = 0; i < 10; i++)
 			{
 				if (Manager.instance.EntryManager.ImageEntry[i] != null)
 				{
 					_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[i]);
-					Debug.LogError("add : "+Manager.instance.EntryManager.ImageEntry[i]);
+					Debug.LogError("add : "+Manager.instance.EntryManager.ImageEntry[i] + "uid: "+Manager.instance.EntryManager.ImageEntry[i].GetEntryIndex());
 					if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count)
 						_currentIndex++;
 					else
@@ -43,18 +42,18 @@ public class Randomizer : MonoBehaviour
 	
 	public void RepopulateEntryList()
 	{
+		var loopToIndex = _currentIndex + 10;
+		
 		_currentEntries = null; 
 		_currentEntries = new List<ImageEntry>(10);
-		for (var i = 0; i < _currentIndex; i++)
+		for (var i = 0; i < loopToIndex; i++)
 		{
-			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex + i]);
-			Debug.LogError("add : "+Manager.instance.EntryManager.ImageEntry[_currentIndex + i]+" : "+(_currentIndex+i));
-			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count)
-				_currentIndex++;
+			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[i]);
+			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count-1)
+				_currentIndex = _currentIndex +1;
 			else
 				_currentIndex = 0;
 		}
-		
 	}
 
 	public List<ImageEntry> GetCurrentEntries()
