@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Randomizer : MonoBehaviour
 {
 	private List<ImageEntry> _currentEntries;
 	private List<GameObject> _spiningWheelEntry;
+	private ImageEntry outEntry;
 	private int _currentIndex;
 
 
@@ -13,48 +15,44 @@ public class Randomizer : MonoBehaviour
 		_currentEntries = null;
 		PopulateEntryList();
 	}
-
-	private void PopulateEntryList()
-	{
-		if (_currentEntries == null)
-		{
-			var loopToIndex = Manager.instance.EntryManager.ImageEntry.Count;
-			_currentEntries = new List<ImageEntry>(10);
-			for (var i = 0; i < 10; i++)
-			{
-				if (Manager.instance.EntryManager.ImageEntry[i] != null)
-				{
-					_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[i]);
-					Debug.LogError("add : "+Manager.instance.EntryManager.ImageEntry[i]);
-					if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count)
-						_currentIndex++;
-					else
-						_currentIndex = 0;
-				}
-			}
-		}
-	}
-
+	
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.A)) 
-			RepopulateEntryList();
+			PopulateEntryList();
+
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			PickFromList();
+		}
 	}
-	
-	public void RepopulateEntryList()
+
+	private void PickFromList()
+	{
+		var randIndex = 0;
+		randIndex = Random.RandomRange(0, _currentEntries.Count);
+		outEntry = _currentEntries[randIndex];
+		outEntry.DecreaseCurrentEntryCount();
+		Debug.LogError(outEntry.GetEntryIndex());
+		PopulateEntryList();
+	}
+
+	public void PopulateEntryList()
 	{
 		_currentEntries = null; 
 		_currentEntries = new List<ImageEntry>(10);
-		for (var i = 0; i < _currentIndex; i++)
+		var remainingAddingIndex = 10;
+		while (remainingAddingIndex > 0)
 		{
-			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex + i]);
-			Debug.LogError("add : "+Manager.instance.EntryManager.ImageEntry[_currentIndex + i]+" : "+(_currentIndex+i));
-			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count)
+			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);
+//			Debug.LogError("add : " + Manager.instance.EntryManager.ImageEntry[_currentIndex] + " : " + (_currentIndex));
+			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
 				_currentIndex++;
 			else
 				_currentIndex = 0;
+			remainingAddingIndex--;
 		}
-		
+
 	}
 
 	public List<ImageEntry> GetCurrentEntries()
