@@ -54,7 +54,14 @@ public class ImageEntry : MonoBehaviour
 
 	public void LoadImage()
 	{
-		Manager.instance.EntryManager.LoadImage(_entryIndex);
+		var entryIndex = 0;
+		for (var i = 0; i < Manager.instance.EntryManager.ImageEntry.Count; i++)
+		{
+			if (Manager.instance.EntryManager.ImageEntry[i] == this)
+				entryIndex = i;
+		}
+		Debug.LogError("imageEntry : "+entryIndex +  " :: "+ (Manager.instance.EntryManager.ImageEntry.Count));
+		Manager.instance.EntryManager.LoadImage(entryIndex);
 	}
 
 	public void DeleteEntry()

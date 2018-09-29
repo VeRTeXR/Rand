@@ -11,16 +11,17 @@ public class EntryManager : MonoBehaviour
     [SerializeField] private List<Sprite> _loadedSprites;
     public List<ImageEntry> ImageEntry;
 
+
+    public List<Image> GetAppliedImageList()
+    {
+        return _appliedImage;
+    }
+
     public void LoadImage(int appliedImageIndex)
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Images", ".jpg", ".png"));
 
         StartCoroutine(ShowLoadDialogCoroutine(appliedImageIndex));
-    }
-
-    public List<Image> GetAppliedImageList()
-    {
-        return _appliedImage;
     }
 
     IEnumerator ShowLoadDialogCoroutine(int appliedImageIndex)
@@ -39,6 +40,7 @@ public class EntryManager : MonoBehaviour
         fileDir.LoadImageIntoTexture(loadedTex);
         Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
         var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
+        Debug.LogError("applied Image Ind : " + appliedImageIndex);
         _loadedSprites.RemoveAt(appliedImageIndex);
         _loadedSprites.Insert(appliedImageIndex, spriteToUse);
         ApplyLoadedPicToImageTexture(appliedImageIndex);
@@ -46,33 +48,33 @@ public class EntryManager : MonoBehaviour
 
     public void DeleteEntry(GameObject entryGameObject)
     {
+        var entryImageEntry = entryGameObject.GetComponent<ImageEntry>();
         var entryImgComponent = entryGameObject.GetComponentInChildren<Image>();
         if (entryImgComponent.sprite != null && _loadedSprites.Contains(entryImgComponent.sprite))
         {
-            for (var i = 0; i < _loadedSprites.Count; i++)
-            {
-                if (entryImgComponent.sprite == _loadedSprites[i])
-                    _loadedSprites.Remove(_loadedSprites[i]);
-            }
+            _loadedSprites.Remove(entryImgComponent.sprite);
         }
         if (_appliedImage.Contains(entryImgComponent))
         {
-            for (var i = 0; i < _appliedImage.Count; i++)
-            {
-                if (entryImgComponent == _appliedImage[i])
-                    _appliedImage.Remove(_appliedImage[i]);
-            }
+            _appliedImage.Remove(entryImgComponent);
         }
+        if (ImageEntry.Contains(entryImageEntry))
+        {
+            ImageEntry.Remove(entryImageEntry);
+        }
+       
         Destroy(entryGameObject);
+        // reset all the index also i guess 
     }
+
 
     public void AddEntryClick()
     {
         var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
         newEntry.transform.parent = _uiCanvasGameObject.transform;
         var imgComponent = newEntry.GetComponentInChildren<Image>();
-        newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
-        _appliedImage.Add(imgComponent);
+        /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
+        */_appliedImage.Add(imgComponent);
         _loadedSprites.Add(null);
         ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
     }
@@ -83,7 +85,7 @@ public class EntryManager : MonoBehaviour
         if (_loadedSprites[appliedImageIndex] != null)
             _appliedImage[appliedImageIndex].sprite = _loadedSprites[appliedImageIndex];
     }
-    
+
 //    public void SaveData()
 //    {
 //        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
@@ -115,8 +117,6 @@ public class EntryManager : MonoBehaviour
 //        Debug.LogError("save list");
 //        SaveData();
 //    }
-    
-
 }
 
 //[Serializable]

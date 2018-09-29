@@ -27,6 +27,12 @@ public class Randomizer : MonoBehaviour
 		}
 	}
 
+	public void OnRespinClick()
+	{
+		
+		PickFromList();
+	}
+	
 	private void PickFromList()
 	{
 		var randIndex = 0;

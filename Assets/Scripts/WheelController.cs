@@ -21,18 +21,20 @@ public class WheelController : MonoBehaviour
 
 	private void PopulateWheelEntries()
 	{
+		Debug.LogError("populate");
 		for (var i = 0; i < RandomizedImageEntries.Count; i++)
 			CreateWheelEntry(i);
 	}
 
 	private void CreateWheelEntry(int i)
 	{
+		Debug.LogError("create :: "+i);
 		var wheelEntry = Instantiate(WheelEntryPrefab, SpawnTransforms[i]);
 		if (imageList[i].sprite != null)
 		{
 			CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
 			CurrentWheelEntries[i].SetEntryImage(imageList[i].sprite);
 		}
-		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
+//		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
 	}
 }
