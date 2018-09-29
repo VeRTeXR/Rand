@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class ImageEntry : MonoBehaviour
 {
-	private int _entryIndex; 
 	private int _maxCount;
 	private int _currentCount;
 	private string _description;
@@ -12,7 +11,6 @@ public class ImageEntry : MonoBehaviour
 	public Button DecreaseButton;
 	public Button LoadButton;
 	public Button DeleteButton;
-	
 
 	void Start()
 	{
@@ -30,16 +28,6 @@ public class ImageEntry : MonoBehaviour
 	{
 		if (_maxCount < _currentCount)
 			_maxCount = _currentCount;
-	}
-
-	public void SetEntryIndex(int i)
-	{
-		_entryIndex = i;
-	}
-
-	public int GetEntryIndex()
-	{
-		return _entryIndex;
 	}
 	
 	public void SetDescription(string text)

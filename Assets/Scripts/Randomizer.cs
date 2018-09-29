@@ -39,8 +39,9 @@ public class Randomizer : MonoBehaviour
 		randIndex = Random.RandomRange(0, _currentEntries.Count);
 		outEntry = _currentEntries[randIndex];
 		outEntry.DecreaseCurrentEntryCount();
-		Debug.LogError(outEntry.GetEntryIndex());
+		Debug.LogError(randIndex);
 		PopulateEntryList();
+		GetComponent<WheelController>().DepopulateWheelEntries(_currentIndex);
 	}
 
 	public void PopulateEntryList()
@@ -51,7 +52,7 @@ public class Randomizer : MonoBehaviour
 		while (remainingAddingIndex > 0)
 		{
 			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);
-//			Debug.LogError("add : " + Manager.instance.EntryManager.ImageEntry[_currentIndex] + " : " + (_currentIndex));
+			Debug.LogError("add : " + Manager.instance.EntryManager.ImageEntry[_currentIndex] + " : " + (_currentIndex));
 			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
 				_currentIndex++;
 			else
