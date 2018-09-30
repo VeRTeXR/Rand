@@ -19,7 +19,7 @@ public class WheelController : MonoBehaviour
 		Randomizer = GetComponent<Randomizer>();
 		imageList = Manager.instance.EntryManager.GetAppliedImageList();
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
-		PopulateWheelEntries();
+		PopulateWheelEntries(); 
 	}
 
 	public void PopulateWheelEntries()
@@ -31,37 +31,24 @@ public class WheelController : MonoBehaviour
 
 	public void DepopulateWheelEntries(int curIndex)
 	{
-		if (curIndex > imageList.Count)
+		if (curIndex > imageList.Count-1)
 			curIndex = 0;
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
 		for (var i = 0; i < CurrentWheelEntries.Count; i++)
 		{
-			CurrentWheelEntries[i].SetEntryImage(imageList[curIndex+i].sprite);
+			var imgIndex = curIndex + i;
+			if (imgIndex > imageList.Count-1)
+				imgIndex = 0;
+			else
+				imgIndex = curIndex + i;
+//			Debug.LogError( "currentimgidex : "+ imgIndex	);
+			CurrentWheelEntries[i].SetEntryImage(imageList[imgIndex].sprite);
 		}
 	}
 	
-//	public void RepopulateWheelEntries(int index)
-//	{
-//		_currentIndex = index;
-//		RandomizedImageEntries = Randomizer.GetCurrentEntries();
-//		var remainingAddingIndex = 10;
-//		var i = 0;
-//		while (remainingAddingIndex > 0)
-//		{
-//			Debug.LogError("repopulating : "+i);
-//			CurrentWheelEntries[i].SetEntryImage(imageList[_currentIndex].sprite);
-//			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
-//				_currentIndex++;
-//			else
-//				_currentIndex = 0;
-//			i++;
-//			remainingAddingIndex--;
-//		}
-//	}
-//	
 	private void CreateWheelEntry(int i)
 	{
-		Debug.LogError("create :: "+i);
+//		Debug.LogError("create :: "+i);
 		var wheelEntry = Instantiate(WheelEntryPrefab, SpawnTransforms[i]);
 		
 		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());

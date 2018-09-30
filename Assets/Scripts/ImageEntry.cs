@@ -44,11 +44,9 @@ public class ImageEntry : MonoBehaviour
 	{
 		var entryIndex = 0;
 		for (var i = 0; i < Manager.instance.EntryManager.ImageEntry.Count; i++)
-		{
 			if (Manager.instance.EntryManager.ImageEntry[i] == this)
 				entryIndex = i;
-		}
-		Debug.LogError("imageEntry : "+entryIndex +  " :: "+ (Manager.instance.EntryManager.ImageEntry.Count));
+		
 		Manager.instance.EntryManager.LoadImage(entryIndex);
 	}
 
@@ -67,6 +65,10 @@ public class ImageEntry : MonoBehaviour
 	{
 		_currentCount--;
 		Mathf.Clamp(_currentCount, 0, Int32.MaxValue);
+		if (_currentCount < 0)
+		{
+			
+		}
 	}
 
 	public int GetCurrentEntryCount()
