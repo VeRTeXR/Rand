@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Randomizer : MonoBehaviour
 {
 	private List<ImageEntry> _currentEntries;
 	private List<GameObject> _spiningWheelEntry;
-	private ImageEntry outEntry;
+	private ImageEntry _outEntry;
 	private int _currentIndex;
-
-
+	private WheelController _wheelController;
+	private GameObject _rewardEntry;
+	
 	void Awake ()
 	{
+		_wheelController = GetComponent<WheelController>();
 		_currentEntries = null;
 		PopulateEntryList();
 	}
@@ -35,15 +36,22 @@ public class Randomizer : MonoBehaviour
 	
 	private void PickFromList()
 	{
+		//disable arrow seq animation
 		var randIndex = 0;
 		randIndex = Random.RandomRange(0, _currentEntries.Count-1);
-		outEntry = _currentEntries[randIndex];
-		outEntry.DecreaseCurrentEntryCount();
+		_outEntry = _currentEntries[randIndex];
+		_outEntry.DecreaseCurrentEntryCount();
 		Debug.LogError("index : "+randIndex+ " cur :: "+_currentIndex);
-		PopulateEntryList();
-		GetComponent<WheelController>().DepopulateWheelEntries(_currentIndex);
+		RewardSequence(randIndex);
 	}
 
+	public void RewardSequence(int randIndex)
+	{
+		_wheelController.StartWheelRotationAnimation(randIndex);
+		PopulateEntryList();
+	}
+	
+	
 	public void PopulateEntryList()
 	{
 		_currentEntries = null; 
