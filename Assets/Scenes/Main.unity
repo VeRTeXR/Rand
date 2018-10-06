@@ -5635,6 +5635,22 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1297800079}
+--- !u!1 &1367850550 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1229364956246756, guid: 76939bbc98a3b40c0974179f4ef44dd9,
+    type: 2}
+  m_PrefabInternal: {fileID: 1855707473}
+--- !u!225 &1367850551
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1367850550}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1392002719
 GameObject:
   m_ObjectHideFlags: 0
@@ -8092,6 +8108,7 @@ MonoBehaviour:
   ImageList: []
   RotateObj: {fileID: 1944135149}
   Randomizer: {fileID: 0}
+  RewardEntry: {fileID: 1367850550}
 --- !u!114 &1944135152
 MonoBehaviour:
   m_ObjectHideFlags: 0

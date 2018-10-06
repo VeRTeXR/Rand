@@ -12,6 +12,7 @@ public class WheelController : MonoBehaviour
 	public List<Image> ImageList;
 	public GameObject RotateObj;
 	public Randomizer Randomizer;
+	public GameObject RewardEntry;
 	private int _currentIndex;
 	
 	
@@ -42,7 +43,6 @@ public class WheelController : MonoBehaviour
 				imgIndex = 0;
 			else
 				imgIndex = curIndex + i;
-//			Debug.LogError( "currentimgidex : "+ imgIndex	);
 			CurrentWheelEntries[i].SetEntryImage(ImageList[imgIndex].sprite);
 		}
 	}
@@ -58,11 +58,20 @@ public class WheelController : MonoBehaviour
 		var randomFinalAngle = angleList[randEntryIndex];
 		var fullCircles = 5;
 		var _finalAngle = fullCircles * 360 + randomFinalAngle;
-		LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic();
+		var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
+			.setOnComplete(() => CongratulationSequence(randEntryIndex));
 		
+//		LeanTween.moveX(cubeToRemove, -5.5f, 1f).setOnComplete(() => RemoveMe(foo.id, cubeToRemove));
 		//launch reward entry seq 
 		// reward entry seq done, respin 
 
+	}
+
+	private void CongratulationSequence(int randImageIndex )
+	{
+		Debug.LogError("randImageIndex : "+ randImageIndex);
+		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(ImageList[randImageIndex].sprite);
+		RewardEntry.GetComponent<RewardEntry>().StartAnimation();
 	}
 	
 	private void CreateWheelEntry(int i)
