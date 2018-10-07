@@ -9,14 +9,21 @@ public class Randomizer : MonoBehaviour
 	private int _currentIndex;
 	private WheelController _wheelController;
 	private GameObject _rewardEntry;
+	private SpinButton _spinButton;
 	
 	void Awake ()
 	{
 		_wheelController = GetComponent<WheelController>();
-		_currentEntries = null;
 		PopulateEntryList();
 	}
-	
+
+	private void Start()
+	{
+		_spinButton = _wheelController.SpinButton.GetComponent<SpinButton>();
+		Debug.LogError(_spinButton);
+		_spinButton.SetButtonState(true);
+	}
+
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.A)) 
@@ -32,6 +39,7 @@ public class Randomizer : MonoBehaviour
 	{
 		Debug.LogError("nahhhh do it ");
 		PickFromList();
+		_spinButton.SetButtonState(false);
 	}
 	
 	private void PickFromList()
@@ -49,6 +57,11 @@ public class Randomizer : MonoBehaviour
 	{
 		_wheelController.StartWheelRotationAnimation(randIndex);
 		PopulateEntryList();
+	}
+
+	public void RewardSequenceFinished()
+	{
+		_spinButton.SetButtonState(true);
 	}
 	
 	

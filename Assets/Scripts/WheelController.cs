@@ -13,11 +13,11 @@ public class WheelController : MonoBehaviour
 	public GameObject RotateObj;
 	public Randomizer Randomizer;
 	public GameObject RewardEntry;
+	public GameObject SpinButton;
 	private int _currentIndex;
-	private int _previousRandIndex;
 	
 	
-	private void Start()
+	private void Awake()
 	{
 		Randomizer = GetComponent<Randomizer>();
 		ImageList = Manager.instance.EntryManager.GetAppliedImageList();
@@ -71,7 +71,6 @@ public class WheelController : MonoBehaviour
 		Debug.LogError("randImageIndex : "+ randImageIndex);
 		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
 		RewardEntry.GetComponent<RewardEntry>().StartAnimation();
-		_previousRandIndex = randImageIndex;
 	}
 
 	public void ResetWheelState()
@@ -79,7 +78,7 @@ public class WheelController : MonoBehaviour
 		Debug.LogError("resetWheelState");
 		//turn on the arrow
 		RepopulateWheelEntries();
-		
+		Randomizer.RewardSequenceFinished();
 	}
 	
 	private void CreateWheelEntry(int i)
