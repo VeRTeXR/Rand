@@ -14,6 +14,7 @@ public class WheelController : MonoBehaviour
 	public Randomizer Randomizer;
 	public GameObject RewardEntry;
 	private int _currentIndex;
+	private int _previousRandIndex;
 	
 	
 	private void Start()
@@ -28,23 +29,22 @@ public class WheelController : MonoBehaviour
 	{
 		Debug.LogError("populate");
 		for (var i = 0; i < RandomizedImageEntries.Count; i++)
+		{
 			CreateWheelEntry(i);
+			_currentIndex++;
+		}
 	}
 
-	public void DepopulateWheelEntries(int curIndex)
+	public void RepopulateWheelEntries()
 	{
-		if (curIndex > ImageList.Count-1)
-			curIndex = 0;
+		
+		//shit is wrong
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
 		for (var i = 0; i < CurrentWheelEntries.Count; i++)
-		{
-			var imgIndex = curIndex + i;
-			if (imgIndex > ImageList.Count-1)
-				imgIndex = 0;
-			else
-				imgIndex = curIndex + i;
-			CurrentWheelEntries[i].SetEntryImage(ImageList[imgIndex].sprite);
+		{	
+			CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
 		}
+		Debug.LogError("Repopulate Wheel Entries :  " +_currentIndex);
 	}
 
 	public void StartWheelRotationAnimation(int randEntryIndex)
@@ -60,18 +60,26 @@ public class WheelController : MonoBehaviour
 		var _finalAngle = fullCircles * 360 + randomFinalAngle;
 		var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
 			.setOnComplete(() => CongratulationSequence(randEntryIndex));
-		
-//		LeanTween.moveX(cubeToRemove, -5.5f, 1f).setOnComplete(() => RemoveMe(foo.id, cubeToRemove));
-		//launch reward entry seq 
+
 		// reward entry seq done, respin 
 
 	}
 
 	private void CongratulationSequence(int randImageIndex )
 	{
+		
 		Debug.LogError("randImageIndex : "+ randImageIndex);
-		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(ImageList[randImageIndex].sprite);
+		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
 		RewardEntry.GetComponent<RewardEntry>().StartAnimation();
+		_previousRandIndex = randImageIndex;
+	}
+
+	public void ResetWheelState()
+	{
+		Debug.LogError("resetWheelState");
+		//turn on the arrow
+		RepopulateWheelEntries();
+		
 	}
 	
 	private void CreateWheelEntry(int i)

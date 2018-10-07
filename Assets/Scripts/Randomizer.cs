@@ -30,7 +30,7 @@ public class Randomizer : MonoBehaviour
 
 	public void OnRespinClick()
 	{
-		
+		Debug.LogError("nahhhh do it ");
 		PickFromList();
 	}
 	
