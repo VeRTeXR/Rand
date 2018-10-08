@@ -10,6 +10,7 @@ public class Randomizer : MonoBehaviour
 	private WheelController _wheelController;
 	private GameObject _rewardEntry;
 	private SpinButton _spinButton;
+	private GameplayPanelController _gameplayPanel;
 	
 	void Awake ()
 	{
@@ -20,19 +21,15 @@ public class Randomizer : MonoBehaviour
 	private void Start()
 	{
 		_spinButton = _wheelController.SpinButton.GetComponent<SpinButton>();
+		_gameplayPanel = _wheelController.GetComponentInParent<GameplayPanelController>();
 		Debug.LogError(_spinButton);
 		_spinButton.SetButtonState(true);
 	}
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.A)) 
-			PopulateEntryList();
-
 		if (Input.GetKeyDown(KeyCode.Q))
-		{
 			PickFromList();
-		}
 	}
 
 	public void OnRespinClick()
@@ -40,11 +37,12 @@ public class Randomizer : MonoBehaviour
 		Debug.LogError("nahhhh do it ");
 		PickFromList();
 		_spinButton.SetButtonState(false);
+		_gameplayPanel.SetInputAvailability(false);
+		
 	}
 	
 	private void PickFromList()
 	{
-		//disable arrow seq animation
 		var randIndex = 0;
 		randIndex = Random.RandomRange(0, _currentEntries.Count-1);
 		_outEntry = _currentEntries[randIndex];
@@ -62,6 +60,7 @@ public class Randomizer : MonoBehaviour
 	public void RewardSequenceFinished()
 	{
 		_spinButton.SetButtonState(true);
+		_gameplayPanel.SetInputAvailability(true);
 	}
 	
 	

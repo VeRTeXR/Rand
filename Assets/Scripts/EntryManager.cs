@@ -10,8 +10,8 @@ public class EntryManager : MonoBehaviour
     [SerializeField] private List<Image> _appliedImage;
     [SerializeField] private List<Sprite> _loadedSprites;
     public List<ImageEntry> ImageEntry;
-
-
+    public ConfigPanelController ConfigPanelController;
+    
     public List<Image> GetAppliedImageList()
     {
         return _appliedImage;
@@ -64,7 +64,10 @@ public class EntryManager : MonoBehaviour
         }
        
         Destroy(entryGameObject);
-        // reset all the index also i guess 
+        
+        if(ImageEntry.Count < 10)
+            ConfigPanelController.SetStartButtonState(false);
+        
     }
 
 
@@ -77,6 +80,9 @@ public class EntryManager : MonoBehaviour
         */_appliedImage.Add(imgComponent);
         _loadedSprites.Add(null);
         ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
+        
+        if(ImageEntry.Count > 10)
+            ConfigPanelController.SetStartButtonState(true);
     }
 
 

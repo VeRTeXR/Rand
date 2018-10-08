@@ -4125,7 +4125,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1559091118268130
 GameObject:
   m_ObjectHideFlags: 1
@@ -4153,6 +4153,7 @@ GameObject:
   - component: {fileID: 224675275376421610}
   - component: {fileID: 223147341795265966}
   - component: {fileID: 114614630803485538}
+  - component: {fileID: 114516574775562558}
   m_Layer: 5
   m_Name: GameplayPanel
   m_TagString: Untagged
@@ -4335,6 +4336,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224910019052737206}
+  - component: {fileID: 114816535944003594}
   m_Layer: 5
   m_Name: ConfigPanel
   m_TagString: Untagged
@@ -5811,6 +5813,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114516574775562558
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1568601505142080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0afd0cbd3113443cda5d942fc2ac10ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowPanels: {fileID: 11432662}
 --- !u!114 &114547585529156508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6443,6 +6457,18 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
+--- !u!114 &114816535944003594
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1753065287816398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd852310434f485892b5c48b64ee8ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartButton: {fileID: 1551190115997666}
 --- !u!114 &114821107028986232
 MonoBehaviour:
   m_ObjectHideFlags: 1
