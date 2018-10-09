@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameplayPanelController : MonoBehaviour
 {
 
 	public ShowPanels ShowPanels;
 	private bool _inputAvailable;
+	public Image BackgroundImage;
 
 	private void Start()
 	{
+		BackgroundImage.sprite = Manager.instance.EntryManager.BackgroundImage;
+		BackgroundImage.color = Color.white;
 		_inputAvailable = true;
 	}
 

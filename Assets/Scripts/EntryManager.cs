@@ -11,11 +11,50 @@ public class EntryManager : MonoBehaviour
     [SerializeField] private List<Sprite> _loadedSprites;
     public List<ImageEntry> ImageEntry;
     public ConfigPanelController ConfigPanelController;
+    public Sprite BackgroundImage;
+    public Image AppliedBackgroundImage;
+    
     
     public List<Image> GetAppliedImageList()
     {
         return _appliedImage;
     }
+
+    public void LoadBackground()
+    {
+        FileBrowser.SetFilters(false, new FileBrowser.Filter("Images", ".jpg", ".png"));
+        StartCoroutine(ShowLoadBackgroundDialogCoroutine());
+    }
+
+    private IEnumerator ShowLoadBackgroundDialogCoroutine()
+    {
+        yield return FileBrowser.WaitForLoadDialog(false, null, "Load File", "Load");
+
+        Debug.Log(FileBrowser.Success + " " + FileBrowser.Result);
+
+        WWW fileDir = new WWW("file://" + FileBrowser.Result);
+        while (!fileDir.isDone)
+        {
+            yield return null;
+        }
+        Texture2D loadedTex = new Texture2D(fileDir.texture.width, fileDir.texture.height, TextureFormat.ARGB32, false);
+
+        fileDir.LoadImageIntoTexture(loadedTex);
+        Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
+        var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
+        BackgroundImage = spriteToUse;
+        ApplyLoadedSpriteToBackground(spriteToUse);
+    }
+
+    private void ApplyLoadedSpriteToBackground(Sprite loadedSprite)
+    {
+        if (AppliedBackgroundImage != null)
+        {
+            AppliedBackgroundImage.sprite = loadedSprite;
+            AppliedBackgroundImage.color = Color.white;
+        }
+    }
+
 
     public void LoadImage(int appliedImageIndex)
     {
