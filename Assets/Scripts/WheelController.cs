@@ -17,7 +17,7 @@ public class WheelController : MonoBehaviour
 	private int _currentIndex;
 	
 	
-	private void Awake()
+	private void Start()
 	{
 		Randomizer = GetComponent<Randomizer>();
 		ImageList = Manager.instance.EntryManager.GetAppliedImageList();
