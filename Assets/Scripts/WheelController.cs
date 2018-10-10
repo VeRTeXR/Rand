@@ -38,19 +38,13 @@ public class WheelController : MonoBehaviour
 
 	public void RepopulateWheelEntries()
 	{
-		
-		//shit is wrong
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
 		for (var i = 0; i < CurrentWheelEntries.Count; i++)
-		{	
 			CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
-		}
-		Debug.LogError("Repopulate Wheel Entries :  " +_currentIndex);
 	}
 
 	public void StartWheelRotationAnimation(int randEntryIndex)
 	{
-		Debug.LogError( "startWheelRotationRotateTo::: "+randEntryIndex);
 		var _startAngle = this.transform.eulerAngles.z;
 		float[] angleList = new float[]
 		{
@@ -68,20 +62,15 @@ public class WheelController : MonoBehaviour
 
 	private void CongratulationSequence(int randImageIndex )
 	{
-		
-		Debug.LogError("randImageIndex : "+ randImageIndex);
 		for (var i = 0; i < ConfettiGenerator.Count; i++)
-		{
 			ConfettiGenerator[i].ThrowConf();
-		}	
+		
 		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
-		RewardEntry.GetComponent<RewardEntry>().StartAnimation();
+	 	RewardEntry.GetComponent<RewardEntry>().StartAnimation();
 	}
 
 	public void ResetWheelState()
 	{
-		Debug.LogError("resetWheelState");
-		//turn on the arrow
 		RepopulateWheelEntries();
 		Randomizer.RewardSequenceFinished();
 	}
@@ -91,8 +80,6 @@ public class WheelController : MonoBehaviour
 		var wheelEntry = Instantiate(WheelEntryPrefab, SpawnTransforms[i]);
 		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
 		if (ImageList[i].sprite != null)
-		{
 			CurrentWheelEntries[i].SetEntryImage(ImageList[i].sprite);
-		}
 	}
 }

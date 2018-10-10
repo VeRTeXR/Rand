@@ -113,7 +113,7 @@ public class EntryManager : MonoBehaviour
     public void AddEntryClick()
     {
         var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
-        newEntry.transform.parent = _uiCanvasGameObject.transform;
+        newEntry.transform.SetParent(_uiCanvasGameObject.transform);
         var imgComponent = newEntry.GetComponentInChildren<Image>();
         /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
         */_appliedImage.Add(imgComponent);
