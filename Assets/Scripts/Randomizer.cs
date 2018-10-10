@@ -68,7 +68,7 @@ public class Randomizer : MonoBehaviour
 	{
 		_currentEntries = null; 
 		_currentEntries = new List<ImageEntry>(10);
-		var remainingAddingIndex = 10;
+		var remainingAddingIndex = 10; 
 		while (remainingAddingIndex > 0)
 		{
 			_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);

@@ -14,6 +14,7 @@ public class WheelController : MonoBehaviour
 	public Randomizer Randomizer;
 	public GameObject RewardEntry;
 	public GameObject SpinButton;
+	public List<ConfettiGenerator> ConfettiGenerator;
 	private int _currentIndex;
 	
 	
@@ -69,6 +70,10 @@ public class WheelController : MonoBehaviour
 	{
 		
 		Debug.LogError("randImageIndex : "+ randImageIndex);
+		for (var i = 0; i < ConfettiGenerator.Count; i++)
+		{
+			ConfettiGenerator[i].ThrowConf();
+		}	
 		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
 		RewardEntry.GetComponent<RewardEntry>().StartAnimation();
 	}
