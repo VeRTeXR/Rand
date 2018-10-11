@@ -26,8 +26,9 @@ public class RewardEntry : MonoBehaviour
 
     public WheelController WheelController;
 
-    public void SetRewardSprite(Sprite img)
+    public void SetRewardSprite(Sprite img=null)
     {
+        if(img == null) return;
         AppliedRewardImage.sprite = img;
     } 
 }

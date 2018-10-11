@@ -11,6 +11,7 @@ public class ImageEntry : MonoBehaviour
 	public Button DecreaseButton;
 	public Button LoadButton;
 	public Button DeleteButton;
+	public bool HasTriggered;
 
 	void Start()
 	{

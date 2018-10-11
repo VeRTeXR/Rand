@@ -114,6 +114,7 @@ public class EntryManager : MonoBehaviour
     {
         var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
         newEntry.transform.SetParent(_uiCanvasGameObject.transform);
+        newEntry.transform.localScale = new Vector3( 1,1,1);
         var imgComponent = newEntry.GetComponentInChildren<Image>();
         /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
         */_appliedImage.Add(imgComponent);

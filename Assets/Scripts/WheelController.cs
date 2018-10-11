@@ -40,7 +40,13 @@ public class WheelController : MonoBehaviour
 	{
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
 		for (var i = 0; i < CurrentWheelEntries.Count; i++)
-			CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
+		{
+			if (RandomizedImageEntries[i] != null)
+			{
+				if (RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite != null)
+					CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
+			}
+		}
 	}
 
 	public void StartWheelRotationAnimation(int randEntryIndex)
