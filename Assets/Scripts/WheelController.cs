@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.UI;
 
 public class WheelController : MonoBehaviour
@@ -28,7 +27,7 @@ public class WheelController : MonoBehaviour
 
 	public void PopulateWheelEntries()
 	{
-		Debug.LogError("populate");
+//		Debug.LogError("populate");
 		for (var i = 0; i < RandomizedImageEntries.Count; i++)
 		{
 			CreateWheelEntry(i);
@@ -39,29 +38,50 @@ public class WheelController : MonoBehaviour
 	public void RepopulateWheelEntries()
 	{
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
-		for (var i = 0; i < CurrentWheelEntries.Count; i++)
+		for (var i = 0; i < RandomizedImageEntries.Count-1; i++)
 		{
+			Debug.LogError(i + "no");
 			if (RandomizedImageEntries[i] != null)
 			{
 				if (RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite != null)
 					CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
+				CurrentWheelEntries[i].SetLinkEntry(RandomizedImageEntries[i]);
 			}
 		}
 	}
 
-	public void StartWheelRotationAnimation(int randEntryIndex)
+	public void StartWheelRotationAnimation(ImageEntry rewardEntry)
 	{
-		var _startAngle = this.transform.eulerAngles.z;
-		float[] angleList = new float[]
+		WheelEntry rotateToEntry = null;
+		Debug.LogError("rewardEntry : "+rewardEntry);
+		for (var i = 0; i < CurrentWheelEntries.Count; i++)
 		{
-			0, 36, 72, 108, 144, 180, 216, 252, 288, 324, 360
-		};
-		var randomFinalAngle = angleList[randEntryIndex];
-		var fullCircles = 5;
-		var _finalAngle = fullCircles * 360 + randomFinalAngle;
-		var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
-			.setOnComplete(() => CongratulationSequence(randEntryIndex));
-
+			if (rewardEntry == CurrentWheelEntries[i].GetLinkEntry())
+			{
+				rotateToEntry = CurrentWheelEntries[i];
+				Debug.LogError("rotateToEntry : "+rotateToEntry);
+			}
+			Debug.LogError(i);
+		}
+		if (rotateToEntry != null)
+		{
+			Debug.LogError(rotateToEntry.transform.parent.name);
+			var rotateToIndex = rotateToEntry.transform.parent.GetComponent<SpawnPosition>().Id;
+			Debug.LogError(rotateToIndex);
+			float[] angleList =
+			{
+				0, 36, 72, 108, 144, 180, 216, 252, 288, 324, 360
+			};
+			var randomFinalAngle = angleList[rotateToIndex];
+			var fullCircles = 5;
+			var _finalAngle = fullCircles * 360 + randomFinalAngle;
+			var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
+				.setOnComplete(() => CongratulationSequence(rotateToIndex));
+		}
+		else
+		{
+			Debug.LogError("RotateToEntry");
+		}
 		// reward entry seq done, respin 
 
 	}
@@ -71,6 +91,7 @@ public class WheelController : MonoBehaviour
 		for (var i = 0; i < ConfettiGenerator.Count; i++)
 			ConfettiGenerator[i].ThrowConf();
 		
+		if(RandomizedImageEntries[randImageIndex]!=null)
 		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
 	 	RewardEntry.GetComponent<RewardEntry>().StartAnimation();
 	}
@@ -87,5 +108,6 @@ public class WheelController : MonoBehaviour
 		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
 		if (ImageList[i].sprite != null)
 			CurrentWheelEntries[i].SetEntryImage(ImageList[i].sprite);
+		CurrentWheelEntries[i].SetLinkEntry(RandomizedImageEntries[i]);
 	}
 }

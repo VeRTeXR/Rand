@@ -48,27 +48,27 @@ public class Randomizer : MonoBehaviour
 	
 	private void PickFromList()
 	{
-		List<ImageEntry> Count = new List<ImageEntry>();
-		for (var i = 0; i < _currentEntries.Count; i++)
-		{
-			if(_currentEntries[i]!=null) 
-				Count.Add(_currentEntries[i]);
-		}
-		var randIndex = GetNewNumber(randNumbers1, Count.Count);
-		Debug.LogError(randIndex);
+		var randIndex = GetNewNumber(randNumbers1, _currentEntries.Count);
+		Debug.LogError("out : "+randIndex+"_cont : "+_currentEntries.Count);
 		_outEntry = _currentEntries[randIndex];
 		if (_outEntry != null)
 		{
-			_outEntry.HasTriggered = true;
-			_outEntry.DecreaseCurrentEntryCount();
+//			_outEntry.HasTriggered = true;
+//			_outEntry.DecreaseCurrentEntryCount();
 		}
 		Debug.LogError("index : "+randIndex+ " cur :: "+_currentIndex);
-		RewardSequence(randIndex);
+		RewardSequence(_currentEntries[randIndex]);
 	}
 
 	private int GetNewNumber(List<int> randNumList, int availableCount)
 	{
+		int countMax = -1;
 		int a = -1;
+		if (availableCount > countMax)
+		{
+			countMax = availableCount;
+			Debug.LogError("cMax : "+countMax);
+		}
 		while (a == -1)
 		{
 			a = Random.Range(0, availableCount);
@@ -76,8 +76,9 @@ public class Randomizer : MonoBehaviour
 				randNumList.Add(a);
 			else
 			{
-				if (randNumList.Count == 10)
+				if (randNumList.Count == countMax)
 				{
+//					ClearTriggerFromCurrentEntries();
 					randNumList.Clear();
 				}
 				a = -1;
@@ -85,11 +86,19 @@ public class Randomizer : MonoBehaviour
 		}
 		return a;
 	}
+
+	private void ClearTriggerFromCurrentEntries()
+	{
+		for (int i = 0; i < _currentEntries.Count; i++)
+		{
+			_currentEntries[i].HasTriggered = false;
+		}
+	}
 	
 
-	public void RewardSequence(int randIndex)
+	public void RewardSequence(ImageEntry rewardEntry)
 	{
-		_wheelController.StartWheelRotationAnimation(randIndex);
+		_wheelController.StartWheelRotationAnimation(rewardEntry);
 		PopulateEntryList();
 	}
 
@@ -109,15 +118,14 @@ public class Randomizer : MonoBehaviour
 		{
 			if(!Manager.instance.EntryManager.ImageEntry[_currentIndex].HasTriggered && Manager.instance.EntryManager.ImageEntry[_currentIndex].GetCurrentEntryCount() > 0)
 				_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);
-			else 
-				_currentEntries.Add(null);
+//			else 
+//				_currentEntries.Add(null);
 			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
 				_currentIndex++;
 			else
 				_currentIndex = 0;
 			remainingAddingIndex--;
 		}
-		_currentEntries.Sort();
 		Debug.LogError("_current Index : "+_currentIndex);
 
 	}
