@@ -114,18 +114,15 @@ public class EntryManager : MonoBehaviour
 
     public void AddEntryClick()
     {
-        GameObject newEntry;
-        if (ImageEntryPool.TryGetNextObject(Vector3.zero, Quaternion.identity, out newEntry))
-        {
-            newEntry.transform.SetParent(_uiCanvasGameObject.transform);
-            newEntry.transform.localScale = new Vector3(1, 1, 1);
-            var imgComponent = newEntry.GetComponentInChildren<Image>();
-            /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
-            */
-            _appliedImage.Add(imgComponent);
-            _loadedSprites.Add(null);
-            ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
-        }
+        var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
+        newEntry.transform.SetParent(_uiCanvasGameObject.transform);
+        newEntry.transform.localScale = new Vector3( 1,1,1);
+        var imgComponent = newEntry.GetComponentInChildren<Image>();
+        /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
+        */_appliedImage.Add(imgComponent);
+        _loadedSprites.Add(null);
+        ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
+        
         if(ImageEntry.Count > 10)
             ConfigPanelController.SetStartButtonState(true);
     }
