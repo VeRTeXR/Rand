@@ -5,7 +5,7 @@ public class Manager : MonoBehaviour
 {
 
 	public static Manager instance = null;
-	public GameObject StartMenu;
+	public StartOptions StartOptions;
 	public Pause PauseScript;
 	public EntryManager EntryManager;
 
@@ -24,6 +24,7 @@ public class Manager : MonoBehaviour
 
 		DontDestroyOnLoad(gameObject);
 		EntryManager = GetComponent<EntryManager>();
+		StartOptions = FindObjectOfType<StartOptions>();
 	}
 }
 

@@ -40,18 +40,23 @@ public class WheelController : MonoBehaviour
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
 		for (var i = 0; i < RandomizedImageEntries.Count-1; i++)
 		{
-			Debug.LogError(i + "no");
 			if (RandomizedImageEntries[i] != null)
 			{
 				if (RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite != null)
 					CurrentWheelEntries[i].SetEntryImage(RandomizedImageEntries[i].GetComponentInChildren<Image>().sprite);
 				CurrentWheelEntries[i].SetLinkEntry(RandomizedImageEntries[i]);
+				Debug.LogError("randEntryLink : "+RandomizedImageEntries[i].name);
 			}
 		}
 	}
 
 	public void StartWheelRotationAnimation(ImageEntry rewardEntry)
 	{
+		if (rewardEntry == null)
+		{
+			Debug.LogError("reward is null fuck");
+			return;
+		}
 		WheelEntry rotateToEntry = null;
 		Debug.LogError("rewardEntry : "+rewardEntry);
 		for (var i = 0; i < CurrentWheelEntries.Count; i++)
@@ -61,7 +66,6 @@ public class WheelController : MonoBehaviour
 				rotateToEntry = CurrentWheelEntries[i];
 				Debug.LogError("rotateToEntry : "+rotateToEntry);
 			}
-			Debug.LogError(i);
 		}
 		if (rotateToEntry != null)
 		{
@@ -76,7 +80,7 @@ public class WheelController : MonoBehaviour
 			var fullCircles = 5;
 			var _finalAngle = fullCircles * 360 + randomFinalAngle;
 			var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
-				.setOnComplete(() => CongratulationSequence(rotateToIndex));
+				.setOnComplete(() => CongratulationSequence(rewardEntry));
 		}
 		else
 		{
@@ -86,13 +90,12 @@ public class WheelController : MonoBehaviour
 
 	}
 
-	private void CongratulationSequence(int randImageIndex )
+	private void CongratulationSequence(ImageEntry rewardEntry)
 	{
 		for (var i = 0; i < ConfettiGenerator.Count; i++)
 			ConfettiGenerator[i].ThrowConf();
-		
-		if(RandomizedImageEntries[randImageIndex]!=null)
-		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(RandomizedImageEntries[randImageIndex].GetComponentInChildren<Image>().sprite);
+		if(rewardEntry!=null)
+		RewardEntry.GetComponent<RewardEntry>().SetRewardSprite(rewardEntry.GetComponentInChildren<Image>().sprite);
 	 	RewardEntry.GetComponent<RewardEntry>().StartAnimation();
 	}
 
@@ -106,8 +109,8 @@ public class WheelController : MonoBehaviour
 	{
 		var wheelEntry = Instantiate(WheelEntryPrefab, SpawnTransforms[i]);
 		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
-		if (ImageList[i].sprite != null)
-			CurrentWheelEntries[i].SetEntryImage(ImageList[i].sprite);
 		CurrentWheelEntries[i].SetLinkEntry(RandomizedImageEntries[i]);
+		if (CurrentWheelEntries[i].GetLinkEntry() != null)
+			CurrentWheelEntries[i].SetEntryImage(CurrentWheelEntries[i].GetLinkEntry().GetComponentInChildren<Image>().sprite);	
 	}
 }

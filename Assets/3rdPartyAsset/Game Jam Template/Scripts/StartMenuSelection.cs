@@ -35,17 +35,6 @@ public class StartMenuSelection : MonoBehaviour
 			}
 		}
 
-		if (Input.GetKey(KeyCode.Return))
-		{
-			if (ActiveButton() == 0)
-			{
-				Manager.instance.StartMenu.GetComponent<StartOptions>().StartButtonClicked();
-			}
-			if (ActiveButton() == 1)
-			{
-				Manager.instance.StartMenu.GetComponent<QuitApplication>().Quit();
-			}
-		}
 	}
 
 	private int ActiveButton()

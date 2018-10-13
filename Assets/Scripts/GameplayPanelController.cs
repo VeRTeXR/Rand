@@ -40,4 +40,13 @@ public class GameplayPanelController : MonoBehaviour
 			_inputAvailable = false;
 		}
 	}
+
+	public void GoBackToGameplay()
+	{
+		if (ShowPanels != null)
+		{
+			ShowPanels.HideConfigPanel();
+			ShowPanels.ShowGameplayPanel();
+		}
+	}
 }

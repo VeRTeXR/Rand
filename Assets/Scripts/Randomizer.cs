@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Deployment.Internal;
-using NUnit.Framework;
 using UnityEngine;
 
 public class Randomizer : MonoBehaviour
@@ -13,7 +11,9 @@ public class Randomizer : MonoBehaviour
 	private GameObject _rewardEntry;
 	private SpinButton _spinButton;
 	private GameplayPanelController _gameplayPanel;
+	private int _randIndex;
 	private List<int> randNumbers1 = new List<int>();
+	private List<ImageEntry> _alreadyRewardedList = new List<ImageEntry>();
 	
 	void Awake ()
 	{
@@ -39,25 +39,35 @@ public class Randomizer : MonoBehaviour
 
 	public void OnRespinClick()
 	{
-		Debug.LogError("nahhhh do it ");
 		PickFromList();
 		_spinButton.SetButtonState(false);
-		_gameplayPanel.SetInputAvailability(false);
-		
+		_gameplayPanel.SetInputAvailability(false);	
 	}
 	
 	private void PickFromList()
 	{
-		var randIndex = GetNewNumber(randNumbers1, _currentEntries.Count);
-		Debug.LogError("out : "+randIndex+"_cont : "+_currentEntries.Count);
-		_outEntry = _currentEntries[randIndex];
-		if (_outEntry != null)
+		if (_currentEntries.Count < 0)
 		{
-//			_outEntry.HasTriggered = true;
-//			_outEntry.DecreaseCurrentEntryCount();
+			Debug.LogError("randCurrentEntryisOut");
+			return;
 		}
-		Debug.LogError("index : "+randIndex+ " cur :: "+_currentIndex);
-		RewardSequence(_currentEntries[randIndex]);
+		_randIndex = Random.Range(0, _currentEntries.Count-1);//GetNewNumber(randNumbers1, _currentEntries.Count);
+		_outEntry = _currentEntries[_randIndex];
+		var i = 10;
+		while (_alreadyRewardedList.Contains(_outEntry) && _outEntry!=null)
+		{
+			if (i == 0)
+			{
+				Debug.LogError("all has been rewarded");
+				_alreadyRewardedList.Clear();
+			}
+			_randIndex = Random.Range(0, _currentEntries.Count);
+			_outEntry = _currentEntries[_randIndex];
+			i--;
+		}
+		_alreadyRewardedList.Add(_outEntry);
+		_outEntry.DecreaseCurrentEntryCount();
+		RewardSequence(_outEntry);
 	}
 
 	private int GetNewNumber(List<int> randNumList, int availableCount)
@@ -65,10 +75,8 @@ public class Randomizer : MonoBehaviour
 		int countMax = -1;
 		int a = -1;
 		if (availableCount > countMax)
-		{
 			countMax = availableCount;
-			Debug.LogError("cMax : "+countMax);
-		}
+		
 		while (a == -1)
 		{
 			a = Random.Range(0, availableCount);
@@ -78,21 +86,12 @@ public class Randomizer : MonoBehaviour
 			{
 				if (randNumList.Count == countMax)
 				{
-//					ClearTriggerFromCurrentEntries();
 					randNumList.Clear();
 				}
 				a = -1;
 			}
 		}
 		return a;
-	}
-
-	private void ClearTriggerFromCurrentEntries()
-	{
-		for (int i = 0; i < _currentEntries.Count; i++)
-		{
-			_currentEntries[i].HasTriggered = false;
-		}
 	}
 	
 
@@ -116,10 +115,8 @@ public class Randomizer : MonoBehaviour
 		var remainingAddingIndex = 10; 
 		while (remainingAddingIndex > 0)
 		{
-			if(!Manager.instance.EntryManager.ImageEntry[_currentIndex].HasTriggered && Manager.instance.EntryManager.ImageEntry[_currentIndex].GetCurrentEntryCount() > 0)
+			if(Manager.instance.EntryManager.ImageEntry[_currentIndex].GetCurrentEntryCount() > 0)
 				_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);
-//			else 
-//				_currentEntries.Add(null);
 			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
 				_currentIndex++;
 			else
@@ -132,7 +129,6 @@ public class Randomizer : MonoBehaviour
 
 	public List<ImageEntry> GetCurrentEntries()
 	{
-		Debug.LogError("GetCurrentEntries");
 		return _currentEntries;
 	}
 }
