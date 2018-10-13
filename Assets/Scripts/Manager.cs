@@ -9,7 +9,6 @@ public class Manager : MonoBehaviour
 	public Pause PauseScript;
 	public EntryManager EntryManager;
 
-
 	void Start()
 	{
 

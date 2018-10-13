@@ -24,13 +24,7 @@ public class ImageEntry : MonoBehaviour
 		if(DeleteButton != null) 
 			DeleteButton.onClick.AddListener(DeleteEntry);
 	}
-	
-	void Update()
-	{
-		if (_maxCount < _currentCount)
-			_maxCount = _currentCount;
-	}
-	
+
 	public void SetDescription(string text)
 	{
 		_description = text;
@@ -59,6 +53,7 @@ public class ImageEntry : MonoBehaviour
 	public void IncreaseCurrentEntryCount()
 	{
 		_currentCount++;
+		_maxCount++;
 		Mathf.Clamp(_currentCount, 0, Int32.MaxValue);
 	}
 

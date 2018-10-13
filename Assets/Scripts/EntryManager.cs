@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using EZObjectPools;
 using UnityEngine;
 using SimpleFileBrowser;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class EntryManager : MonoBehaviour
     public ConfigPanelController ConfigPanelController;
     public Sprite BackgroundImage;
     public Image AppliedBackgroundImage;
+    public EZObjectPool ImageEntryPool;
     
     
     public List<Image> GetAppliedImageList()
@@ -20,7 +22,7 @@ public class EntryManager : MonoBehaviour
         return _appliedImage;
     }
 
-    public void LoadBackground()
+    public void LoadBackgroundClick()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter("Images", ".jpg", ".png"));
         StartCoroutine(ShowLoadBackgroundDialogCoroutine());
@@ -46,7 +48,7 @@ public class EntryManager : MonoBehaviour
         ApplyLoadedSpriteToBackground(spriteToUse);
     }
 
-    private void ApplyLoadedSpriteToBackground(Sprite loadedSprite)
+    public void ApplyLoadedSpriteToBackground(Sprite loadedSprite)
     {
         if (AppliedBackgroundImage != null)
         {
@@ -112,15 +114,18 @@ public class EntryManager : MonoBehaviour
 
     public void AddEntryClick()
     {
-        var newEntry = Instantiate((GameObject) Resources.Load("Prefabs/ImageEntry"));
-        newEntry.transform.SetParent(_uiCanvasGameObject.transform);
-        newEntry.transform.localScale = new Vector3( 1,1,1);
-        var imgComponent = newEntry.GetComponentInChildren<Image>();
-        /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
-        */_appliedImage.Add(imgComponent);
-        _loadedSprites.Add(null);
-        ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
-        
+        GameObject newEntry;
+        if (ImageEntryPool.TryGetNextObject(Vector3.zero, Quaternion.identity, out newEntry))
+        {
+            newEntry.transform.SetParent(_uiCanvasGameObject.transform);
+            newEntry.transform.localScale = new Vector3(1, 1, 1);
+            var imgComponent = newEntry.GetComponentInChildren<Image>();
+            /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
+            */
+            _appliedImage.Add(imgComponent);
+            _loadedSprites.Add(null);
+            ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
+        }
         if(ImageEntry.Count > 10)
             ConfigPanelController.SetStartButtonState(true);
     }

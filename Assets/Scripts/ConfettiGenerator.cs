@@ -21,6 +21,7 @@ public class ConfettiGenerator : MonoBehaviour
                     c.GetComponent<Image>().color = ColorList[Random.Range(0, ColorList.Count)];
                 c.gameObject.SetActive(true);
                 c.transform.SetParent(transform);
+                c.transform.localScale = Vector3.one;
                 c.GetComponent<Rigidbody2D>().velocity= Vector2.zero;
                 c.transform.eulerAngles = new Vector3(0, 0, Random.Range(-10, 10));
                 c.GetComponent<Rigidbody2D>()

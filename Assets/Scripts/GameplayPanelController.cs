@@ -9,12 +9,23 @@ public class GameplayPanelController : MonoBehaviour
 	public ShowPanels ShowPanels;
 	private bool _inputAvailable;
 	public Image BackgroundImage;
+	public WheelController WheelController;
 
 	private void Start()
 	{
 		BackgroundImage.sprite = Manager.instance.EntryManager.BackgroundImage;
 		BackgroundImage.color = Color.white;
 		_inputAvailable = true;
+		WheelController = GetComponentInChildren<WheelController>();
+	}
+
+	private void OnEnable()
+	{
+		BackgroundImage.sprite = Manager.instance.EntryManager.BackgroundImage;
+		BackgroundImage.color = Color.white;
+		Debug.LogError("enabler");
+		if (WheelController != null)
+			WheelController.Reinit();
 	}
 
 	public void SetInputAvailability(bool isEnable)
@@ -41,12 +52,4 @@ public class GameplayPanelController : MonoBehaviour
 		}
 	}
 
-	public void GoBackToGameplay()
-	{
-		if (ShowPanels != null)
-		{
-			ShowPanels.HideConfigPanel();
-			ShowPanels.ShowGameplayPanel();
-		}
-	}
 }

@@ -14,7 +14,6 @@ public class WheelController : MonoBehaviour
 	public GameObject RewardEntry;
 	public GameObject SpinButton;
 	public List<ConfettiGenerator> ConfettiGenerator;
-	private int _currentIndex;
 	
 	
 	private void Start()
@@ -27,18 +26,17 @@ public class WheelController : MonoBehaviour
 
 	public void PopulateWheelEntries()
 	{
-//		Debug.LogError("populate");
-		for (var i = 0; i < RandomizedImageEntries.Count; i++)
+		Debug.LogError("populate");
+		for (var i = 0; i < 10; i++)
 		{
 			CreateWheelEntry(i);
-			_currentIndex++;
 		}
 	}
 
 	public void RepopulateWheelEntries()
 	{
 		RandomizedImageEntries = Randomizer.GetCurrentEntries();
-		for (var i = 0; i < RandomizedImageEntries.Count-1; i++)
+		for (var i = 0; i < RandomizedImageEntries.Count; i++)
 		{
 			if (RandomizedImageEntries[i] != null)
 			{
@@ -78,16 +76,14 @@ public class WheelController : MonoBehaviour
 			};
 			var randomFinalAngle = angleList[rotateToIndex];
 			var fullCircles = 5;
-			var _finalAngle = fullCircles * 360 + randomFinalAngle;
-			var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, _finalAngle), 5f).setEaseInOutElastic()
+			var finalAngle = fullCircles * 360 + randomFinalAngle;
+			var rotateAnim = LeanTween.rotate(RotateObj, new Vector3(0, 0, finalAngle), 5f).setEaseInOutElastic()
 				.setOnComplete(() => CongratulationSequence(rewardEntry));
 		}
 		else
 		{
-			Debug.LogError("RotateToEntry");
+			Debug.LogError("RotateToEntryIsNull");
 		}
-		// reward entry seq done, respin 
-
 	}
 
 	private void CongratulationSequence(ImageEntry rewardEntry)
@@ -109,8 +105,17 @@ public class WheelController : MonoBehaviour
 	{
 		var wheelEntry = Instantiate(WheelEntryPrefab, SpawnTransforms[i]);
 		CurrentWheelEntries.Add(wheelEntry.GetComponent<WheelEntry>());
+		if(i > RandomizedImageEntries.Count-1) return;
 		CurrentWheelEntries[i].SetLinkEntry(RandomizedImageEntries[i]);
 		if (CurrentWheelEntries[i].GetLinkEntry() != null)
 			CurrentWheelEntries[i].SetEntryImage(CurrentWheelEntries[i].GetLinkEntry().GetComponentInChildren<Image>().sprite);	
+	}
+
+	public void Reinit()
+	{
+		Randomizer.PopulateEntryList();
+		RepopulateWheelEntries();
+		Randomizer.Reinit();
+		Debug.LogError("reinit");
 	}
 }

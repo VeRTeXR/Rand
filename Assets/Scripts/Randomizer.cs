@@ -4,7 +4,6 @@ using UnityEngine;
 public class Randomizer : MonoBehaviour
 {
 	private List<ImageEntry> _currentEntries;
-	private List<GameObject> _spiningWheelEntry;
 	private ImageEntry _outEntry;
 	private int _currentIndex;
 	private WheelController _wheelController;
@@ -12,7 +11,6 @@ public class Randomizer : MonoBehaviour
 	private SpinButton _spinButton;
 	private GameplayPanelController _gameplayPanel;
 	private int _randIndex;
-	private List<int> randNumbers1 = new List<int>();
 	private List<ImageEntry> _alreadyRewardedList = new List<ImageEntry>();
 	
 	void Awake ()
@@ -25,7 +23,6 @@ public class Randomizer : MonoBehaviour
 	{
 		_spinButton = _wheelController.SpinButton.GetComponent<SpinButton>();
 		_gameplayPanel = _wheelController.GetComponentInParent<GameplayPanelController>();
-		Debug.LogError(_spinButton);
 		_spinButton.SetButtonState(true);
 	}
 
@@ -48,6 +45,7 @@ public class Randomizer : MonoBehaviour
 	{
 		if (_currentEntries.Count < 0)
 		{
+//			_spinButton.SetButtonState(false);
 			Debug.LogError("randCurrentEntryisOut");
 			return;
 		}
@@ -70,31 +68,6 @@ public class Randomizer : MonoBehaviour
 		RewardSequence(_outEntry);
 	}
 
-	private int GetNewNumber(List<int> randNumList, int availableCount)
-	{
-		int countMax = -1;
-		int a = -1;
-		if (availableCount > countMax)
-			countMax = availableCount;
-		
-		while (a == -1)
-		{
-			a = Random.Range(0, availableCount);
-			if (!randNumList.Contains(a))
-				randNumList.Add(a);
-			else
-			{
-				if (randNumList.Count == countMax)
-				{
-					randNumList.Clear();
-				}
-				a = -1;
-			}
-		}
-		return a;
-	}
-	
-
 	public void RewardSequence(ImageEntry rewardEntry)
 	{
 		_wheelController.StartWheelRotationAnimation(rewardEntry);
@@ -103,11 +76,18 @@ public class Randomizer : MonoBehaviour
 
 	public void RewardSequenceFinished()
 	{
-		_spinButton.SetButtonState(true);
+		if (_currentEntries.Count <= 0)
+		{
+			_spinButton.SetButtonState(false);
+		}
+
+		else
+		{
+			_spinButton.SetButtonState(true);
+		}
 		_gameplayPanel.SetInputAvailability(true);
 	}
-	
-	
+
 	public void PopulateEntryList()
 	{
 		_currentEntries = null; 
@@ -117,14 +97,19 @@ public class Randomizer : MonoBehaviour
 		{
 			if(Manager.instance.EntryManager.ImageEntry[_currentIndex].GetCurrentEntryCount() > 0)
 				_currentEntries.Add(Manager.instance.EntryManager.ImageEntry[_currentIndex]);
-			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count - 1)
+			if (_currentIndex < Manager.instance.EntryManager.ImageEntry.Count-1)
 				_currentIndex++;
 			else
 				_currentIndex = 0;
 			remainingAddingIndex--;
 		}
-		Debug.LogError("_current Index : "+_currentIndex);
+		Debug.LogError("randomizer Populate");
+	}
 
+	public void Reinit()
+	{
+		_spinButton.SetButtonState(true);
+		_gameplayPanel.SetInputAvailability(true);	
 	}
 
 	public List<ImageEntry> GetCurrentEntries()

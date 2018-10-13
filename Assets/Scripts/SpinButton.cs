@@ -12,8 +12,6 @@ public class SpinButton : MonoBehaviour
 	private Button _spinButton;
 	private WheelController _wheelController;
 	
-
-
 	private void Awake()
 	{
 		_origScale = Arrow.transform.localScale;
@@ -25,14 +23,12 @@ public class SpinButton : MonoBehaviour
 	{
 		if (isEnable)
 		{
-			_wheelSpinStart = false;
 			ShowArrow();
 			Debug.LogError(_spinButton + " : "+_wheelController);
 			_spinButton.onClick.AddListener(_wheelController.Randomizer.OnRespinClick);
 		}
 		else
 		{
-			_wheelSpinStart = true;
 			HideArrow();
 			_spinButton.onClick.RemoveAllListeners();
 		}
