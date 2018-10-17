@@ -179,7 +179,8 @@ public class EntryManager : MonoBehaviour
             ApplyLoadedPicToImageTexture(i);
             
         }
-        file.Close();           
+        file.Close();        
+        ConfigPanelController.SetLoadButtonState(false);
     }
 }
 
