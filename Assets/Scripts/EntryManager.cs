@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using EZObjectPools;
 using UnityEngine;
 using SimpleFileBrowser;
@@ -15,7 +18,8 @@ public class EntryManager : MonoBehaviour
     public Sprite BackgroundImage;
     public Image AppliedBackgroundImage;
     public EZObjectPool ImageEntryPool;
-    
+    private int _entryCount;
+    public List<string> PathList;
     
     public List<Image> GetAppliedImageList()
     {
@@ -77,7 +81,7 @@ public class EntryManager : MonoBehaviour
             yield return null;
         }
         Texture2D loadedTex = new Texture2D(fileDir.texture.width, fileDir.texture.height, TextureFormat.ARGB32, false);
-
+        PathList.Add(FileBrowser.Result);
         fileDir.LoadImageIntoTexture(loadedTex);
         Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
         var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
@@ -118,8 +122,7 @@ public class EntryManager : MonoBehaviour
         newEntry.transform.SetParent(_uiCanvasGameObject.transform);
         newEntry.transform.localScale = new Vector3( 1,1,1);
         var imgComponent = newEntry.GetComponentInChildren<Image>();
-        /*newEntry.GetComponent<ImageEntry>().SetEntryIndex(_appliedImage.Count);
-        */_appliedImage.Add(imgComponent);
+        _appliedImage.Add(imgComponent);
         _loadedSprites.Add(null);
         ImageEntry.Add(newEntry.GetComponent<ImageEntry>());
         
@@ -134,42 +137,55 @@ public class EntryManager : MonoBehaviour
             _appliedImage[appliedImageIndex].sprite = _loadedSprites[appliedImageIndex];
     }
 
-//    public void SaveData()
-//    {
-//        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
-//        BinaryFormatter binF = new BinaryFormatter();
-//        
-//        Debug.LogError(Application.persistentDataPath);
-//        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.OpenOrCreate);
-//        ManagerData dat = new ManagerData();
-//        dat.entryImages = _appliedImage;
-//        dat.LoadedSprites = _loadedSprites;
-//        binF.Serialize(file, dat);
-//        file.Close();
-//    }
+    private void LoadEntry() {}
+    
+    
+    public void SaveData()
+    {
+        //https://unity3d.com/learn/tutorials/topics/scripting/persistence-saving-and-loading-data
+        BinaryFormatter binF = new BinaryFormatter();
+        
+        Debug.LogError(Application.persistentDataPath);
+        FileStream file = File.Create(Application.persistentDataPath + "/managerInfo.dat");
+        ManagerData dat = new ManagerData();
+        dat.EntryCount = ImageEntry.Count;
+        dat.EntryPathList = PathList;
+        
+        binF.Serialize(file, dat);
+        file.Close();
+    }
+    
+    public void LoadData()
+    {
+        BinaryFormatter binF = new BinaryFormatter();
+        
+        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.Open);
 
-    //    public void LoadData()
-//    {
-//        BinaryFormatter binF = new BinaryFormatter();
-//        
-//        Debug.LogError(Application.persistentDataPath);
-//        FileStream file = File.Open(Application.persistentDataPath + "/managerInfo.dat", FileMode.Open);
-//
-//        ManagerData loadedData = (ManagerData)binF.Deserialize(file);
-//        file.Close();        
-//        
-//    }
+        ManagerData loadedData = (ManagerData)binF.Deserialize(file);
+        for (var i = 0; i < loadedData.EntryCount; i++)
+        {
+            AddEntryClick();
+        }
 
-//    public void SaveDataClick()
-//    {
-//        Debug.LogError("save list");
-//        SaveData();
-//    }
+        for (var i = 0; i < loadedData.EntryPathList.Count; i++)
+        {
+            WWW fileDir = new WWW("file://" +loadedData.EntryPathList[i]);
+            Texture2D loadedTex = new Texture2D(fileDir.texture.width, fileDir.texture.height, TextureFormat.ARGB32, false);
+            fileDir.LoadImageIntoTexture(loadedTex);
+            Rect rec = new Rect(0, 0, loadedTex.width, loadedTex.height);
+            var spriteToUse = Sprite.Create(loadedTex, rec, new Vector2(0.5f, 0.5f), 100);
+            _loadedSprites.RemoveAt(i);
+            _loadedSprites.Insert(i, spriteToUse);
+            ApplyLoadedPicToImageTexture(i);
+            
+        }
+        file.Close();           
+    }
 }
 
-//[Serializable]
-//class ManagerData
-//{
-//    public List<Image> entryImages;
-//    public List<Sprite> LoadedSprites;
-//}
+[Serializable]
+class ManagerData
+{
+    public int EntryCount;
+    public List<string> EntryPathList;
+}
